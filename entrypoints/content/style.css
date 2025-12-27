@@ -1,0 +1,24 @@
+body {
+	--highlight-color-raito: 40%;
+	--highlight-color-selected-raito: calc(var(--highlight-color-raito) - 10%);
+	--highlight-color: color-mix(in srgb, var(--defaultColorMain) var(--highlight-color-raito), white);
+	--highlight-color-selected: color-mix(in srgb, var(--defaultColorMain) var(--highlight-color-selected-raito), white);
+}
+
+#issues-table > tbody > tr[highlight] {
+	&.is_selected {
+		--highlight-color: var(--highlight-color-selected);
+	}
+	> td {
+		background-color: var(--highlight-color) !important;
+		& .hover-wrapper {
+			background-color: var(--highlight-color);
+		}
+	}
+}
+
+[data-tooltip]:disabled:hover:before,
+[data-tooltip]:disabled:hover[class*='simptip']:after {
+	opacity: 0;
+	visibility: hidden;
+}
