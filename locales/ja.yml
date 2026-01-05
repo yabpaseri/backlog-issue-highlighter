@@ -1,0 +1,25 @@
+tooltip:
+    reset: 閲覧済み課題の記録をリセット
+    disableHighlight: 閲覧済み課題のハイライトを無効化
+    enableHighlight: 閲覧済み課題のハイライトを有効化
+    disableUpdateDetails: 最終更新情報の表示を無効化
+    enableUpdateDetails: 最終更新情報の表示を有効化
+alert:
+    noRecords: 閲覧済み課題の記録はありません。
+confirm:
+    reset: 閲覧済み課題の記録をリセットします。よろしいですか？
+    resetCount:
+        n: ($1件の記録が削除されます)
+label:
+    lastUpdatedBy: 最終更新者
+    lastUpdatedAt: 最終更新日
+options:
+    title: 設定
+    highlightEnabled:
+        label: 閲覧済み課題のハイライトをデフォルトでONにする
+        description: この設定を有効にすると、ページ読み込み時に自動的にハイライト表示されます
+    updateDetailsEnabled:
+        label: 最終更新情報の表示をデフォルトでONにする
+        description: この設定を有効にすると、ページ読み込み時に自動的に最終更新情報が表示されます
+common:
+    unknown: 不明

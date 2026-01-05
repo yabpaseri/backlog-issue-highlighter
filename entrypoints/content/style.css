@@ -1,0 +1,47 @@
+body {
+	--highlight-mix-ratio: 40%;
+	--highlight-mix-ratio-selected: calc(var(--highlight-mix-ratio) - 10%);
+	--highlight-color: color-mix(in srgb, var(--defaultColorMain) var(--highlight-mix-ratio), white);
+	--highlight-color-selected: color-mix(in srgb, var(--defaultColorMain) var(--highlight-mix-ratio-selected), white);
+}
+
+#issues-table > tbody > tr > td.cell-summary div[class^='_summary_title_text']:has(+ div.cell-hover-actions) {
+	/** 18*2+4+6 (18pxのSVGのアイコン2つをgap:4pxで配置 + padding-left:6px) */
+	padding-right: 46px;
+}
+
+#issues-table > tbody > tr[issue-highlighted] {
+	/* 課題をホバーしているときは色を変える */
+	&.is_selected {
+		--highlight-color: var(--highlight-color-selected);
+		--backgroundColorHover: var(--highlight-color-selected);
+	}
+
+	> td {
+		background-color: var(--highlight-color) !important;
+
+		/* .is_selectedの場合だけにしていると一瞬だけ元の色が見える。 */
+		/* 他への影響もないので、コチラにも足しておくことにした */
+		--backgroundColorHover: var(--highlight-color-selected);
+
+		/* 件名のセルの背景にチェックマークを出す */
+		/* 親子課題を展開したときにも背景色が付くが、それとの見分けを容易にするため */
+		&.cell-summary {
+			position: relative;
+			&::before {
+				content: '';
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -70%) rotate(45deg);
+				width: 18px;
+				height: 36px;
+				border-right: 5px solid currentColor;
+				border-bottom: 5px solid currentColor;
+				opacity: 0.4;
+				pointer-events: none;
+				z-index: 0;
+			}
+		}
+	}
+}

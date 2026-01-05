@@ -1,0 +1,27 @@
+tooltip:
+    reset: Reset viewed issues history
+    disableHighlight: Disable highlight for viewed issues
+    enableHighlight: Enable highlight for viewed issues
+    disableUpdateDetails: Disable update details display
+    enableUpdateDetails: Enable update details display
+alert:
+    noRecords: No viewed issues recorded.
+confirm:
+    reset: Reset all viewed issues history. Are you sure?
+    resetCount:
+        0: (No records will be deleted)
+        1: (1 record will be deleted)
+        n: ($1 records will be deleted)
+label:
+    lastUpdatedBy: Last Updated By
+    lastUpdatedAt: Last Updated At
+options:
+    title: Settings
+    highlightEnabled:
+        label: Enable highlight for viewed issues by default
+        description: When enabled, viewed issues will be automatically highlighted on page load
+    updateDetailsEnabled:
+        label: Enable update details display by default
+        description: When enabled, last update information will be automatically displayed on page load
+common:
+    unknown: Unknown
