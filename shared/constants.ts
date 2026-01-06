@@ -6,3 +6,4 @@ export const SESSION_STORAGE_KEY_FOOTPRINTS = 'footprints';
 export const SESSION_STORAGE_KEY_ISSUE_UPDATE_DETAILS = 'issue-update-details';
 
 export const ATTRIBUTE_NAME_ISSUE_HIGHLIGHTED = 'issue-highlighted';
+export const ATTRIBUTE_NAME_ISSUE_UPDATE_DETAILS_IGNORED = 'issue-update-details-ignored';

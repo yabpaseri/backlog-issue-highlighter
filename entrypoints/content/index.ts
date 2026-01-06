@@ -58,7 +58,7 @@ function rerenderAllUpdateDetails() {
 			const summary = ele.querySelector<HTMLElement>('[class^="_summary_title_text"]');
 			if (summary) {
 				const updated = getLastUpdatedAuditView(key);
-				summary.innerText = `${summary.textContent}\n----------\n${i18n.t('label.lastUpdatedBy')}: ${updated.by}\n${i18n.t('label.lastUpdatedAt')}: ${updated.at}`;
+				summary.innerText = `${summary.innerText}\n----------\n${i18n.t('label.lastUpdatedBy')}: ${updated.by}\n${i18n.t('label.lastUpdatedAt')}: ${updated.at}`;
 			}
 		});
 	}
@@ -212,7 +212,7 @@ function observe(ctx: InstanceType<typeof ContentScriptContext>) {
 				const summary = node.querySelector<HTMLElement>('[class^="_summary_title_text"]');
 				if (summary && updateDetailsEnabled()) {
 					const updated = getLastUpdatedAuditView(key);
-					summary.innerText = `${summary.textContent}\n----------\n${i18n.t('label.lastUpdatedBy')}: ${updated.by}\n${i18n.t('label.lastUpdatedAt')}: ${updated.at}`;
+					summary.innerText = `${summary.innerText.split('\n')[0]}\n----------\n${i18n.t('label.lastUpdatedBy')}: ${updated.by}\n${i18n.t('label.lastUpdatedAt')}: ${updated.at}`;
 				}
 			}
 			// ハイライトの適用
@@ -228,7 +228,34 @@ function observe(ctx: InstanceType<typeof ContentScriptContext>) {
 	// ページ遷移や子課題の展開などで課題一覧が書き換えられたときに発火するオブザーバー
 	const observer = new MutationObserver((mutations) => {
 		const execute = () => {
-			const nodes = mutations.flatMap((mutation) => [...mutation.addedNodes]);
+			const nodes = mutations.reduce<Node[]>((acc, mutation) => {
+				if (
+					mutation.type === 'childList' &&
+					mutation.target instanceof HTMLTableSectionElement &&
+					mutation.target.parentElement?.id === 'issues-table'
+				) {
+					// tbody直下に追加されたノードを収集
+					acc.push(...mutation.addedNodes);
+				} else if (
+					mutation.type === 'childList' &&
+					mutation.target instanceof HTMLElement &&
+					mutation.target.matches('[class^="_summary_title_text"]')
+				) {
+					// タイトルテキストが変更された行を収集
+					// ただし、拡張機能自身が変更した場合は無視
+					if (mutation.target.hasAttribute(c.ATTRIBUTE_NAME_ISSUE_UPDATE_DETAILS_IGNORED)) {
+						mutation.target.removeAttribute(c.ATTRIBUTE_NAME_ISSUE_UPDATE_DETAILS_IGNORED);
+					} else {
+						const row = mutation.target.closest<HTMLTableRowElement>('tr[data-row-index]');
+						if (row) {
+							mutation.target.toggleAttribute(c.ATTRIBUTE_NAME_ISSUE_UPDATE_DETAILS_IGNORED, true);
+							acc.push(row);
+						}
+					}
+				}
+
+				return acc;
+			}, []);
 			apply(nodes);
 		};
 		// 読み込み中でなければ即時実行
@@ -256,8 +283,7 @@ function observe(ctx: InstanceType<typeof ContentScriptContext>) {
 			// 課題の詳細から戻ってきた場合、既に行が存在している
 			const rows = tbody.querySelectorAll<HTMLTableRowElement>('tr[data-row-index]');
 			if (rows.length > 0) apply([...rows]);
-
-			observer.observe(tbody, { childList: true });
+			observer.observe(tbody, { childList: true, subtree: true });
 		},
 		onRemove() {
 			observer.disconnect();
