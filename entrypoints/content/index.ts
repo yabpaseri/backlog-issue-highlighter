@@ -38,7 +38,7 @@ function rerenderAllHighlights() {
 	});
 	if (highlightEnabled()) {
 		footprints().forEach((key) => {
-			tbody.querySelectorAll<HTMLTableRowElement>(`tr[aria-label*="Issue ${key}"]`).forEach((ele) => {
+			tbody.querySelectorAll<HTMLTableRowElement>(`tr[aria-label~="${key}"]`).forEach((ele) => {
 				ele.toggleAttribute(c.ATTRIBUTE_NAME_ISSUE_HIGHLIGHTED, true);
 			});
 		});
